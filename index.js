@@ -19,7 +19,15 @@ async function runPrediction() {
     }
 
     // Show loading state
-    resultContainer.innerHTML = `<p>🔄 Predicting for ${stockSymbol}...</p>`;
+    resultContainer.innerHTML = `
+        <div class="loading-container">
+            <div class="loading-text">Predicting for ${stockSymbol}</div>
+            <div class="loading-spinner">
+            <div class="spinner-circle"></div>
+            </div>
+        </div>
+        `;
+    // resultContainer.innerHTML = `<p>🔄 Predicting for ${stockSymbol}...</p>`;
 
     try {
         const response = await fetch("http://127.0.0.1:8000/predict", {
@@ -92,7 +100,10 @@ async function runPrediction() {
         }
 
         // Update confidence level, time series model, and news sentiment
-        document.querySelector("#confidenceLevel strong").textContent = result.accuracy;
+        const confidenceLevelElement = document.querySelector("#confidenceLevel strong");
+        confidenceLevelElement.textContent = result.accuracy;
+        confidenceLevelElement.style.color = "green";
+        // document.querySelector("#confidenceLevel strong").textContent = result.accuracy;
         // document.querySelector("#timeSeriesModel strong").textContent = result.time_series_model;
         document.querySelector("#newsSentiment strong").textContent = result.sentiment;
 
@@ -150,6 +161,8 @@ async function runPrediction() {
         plotPredictionChart(result.y_test_actual,result.y_pred_actual);
         console.log(result.deep_insight);
 
+        populatePredictionTable(result.next5_days, result.percent, result.direction);
+
         updateEconomicIndicators(result.indicators);
 
         // Update the deepInsight element on the current page if it exists
@@ -177,6 +190,8 @@ async function runPrediction() {
         }));
     }
 }
+
+
 
 
 function plotPredictionChart(actualPrices, predictedPrices) {
@@ -470,6 +485,109 @@ function updateEconomicIndicators(data) {
     // }
   }
 }
+
+
+function populatePredictionTable(next5Days, percentChanges, directions) {
+    const tableBody = document.getElementById('predictionTableBody');
+    tableBody.innerHTML = ''; // Clear existing content
+    
+    // Loop through predictions and create table rows
+    for (let i = 0; i < next5Days.length; i++) {
+      // Calculate future day number
+      const futureDate = i + 1;
+      
+      // Create table row
+      const row = document.createElement('tr');
+      
+      // Create and append table cells
+      const dateCell = document.createElement('td');
+      dateCell.style.padding = '12px';
+      dateCell.style.border = '1px solid #ddd';
+      dateCell.textContent = 'Day' + futureDate;
+      
+      const priceCell = document.createElement('td');
+      priceCell.style.padding = '12px';
+      priceCell.style.border = '1px solid #ddd';
+      priceCell.textContent = '$' + next5Days[i].toFixed(2);
+      
+      const percentCell = document.createElement('td');
+      percentCell.style.padding = '12px';
+      percentCell.style.border = '1px solid #ddd';
+      const percentValue = percentChanges[i].toFixed(2);
+      
+      // Add direction arrow based on the direction variable
+      if (directions[i] === 'Increase') {
+        percentCell.innerHTML = percentValue + '% <span style="color: green;">↑</span>';
+        percentCell.style.color = 'green';
+      } else if (directions[i] === 'Decrease') {
+        percentCell.innerHTML = percentValue + '% <span style="color: red;">↓</span>';
+        percentCell.style.color = 'red';
+      } else {
+        // No change
+        percentCell.textContent = percentValue + '%';
+      }
+      
+      // Append cells to row
+      row.appendChild(dateCell);
+      row.appendChild(priceCell);
+      row.appendChild(percentCell);
+      
+      // Append row to table body
+      tableBody.appendChild(row);
+    }
+}
+
+// function populatePredictionTable(next5Days, percentChanges) {
+//     const tableBody = document.getElementById('predictionTableBody');
+//     tableBody.innerHTML = ''; // Clear existing content
+    
+//     // Get the current date to calculate future dates
+//     const today = new Date();
+    
+//     // Loop through predictions and create table rows
+//     for (let i = 0; i < next5Days.length; i++) {
+//       // Calculate the date (current date + i+1 days)
+//     //   const futureDate = new Date(today);
+//     //   futureDate.setDate(today.getDate() + i + 1);
+//       futureDate=i+1;
+//     //   const dateString = futureDate.toLocaleDateString('en-US');
+      
+//       // Create table row
+//       const row = document.createElement('tr');
+      
+//       // Create and append table cells
+//       const dateCell = document.createElement('td');
+//       dateCell.style.padding = '12px';
+//       dateCell.style.border = '1px solid #ddd';
+//       dateCell.textContent = 'Day' + futureDate;
+      
+//       const priceCell = document.createElement('td');
+//       priceCell.style.padding = '12px';
+//       priceCell.style.border = '1px solid #ddd';
+//       priceCell.textContent = '$' + next5Days[i].toFixed(2);
+      
+//       const percentCell = document.createElement('td');
+//       percentCell.style.padding = '12px';
+//       percentCell.style.border = '1px solid #ddd';
+//       const percentValue = percentChanges[i].toFixed(2);
+//       percentCell.textContent = percentValue + '%';
+      
+//       // Color the percent change based on value
+//       if (percentChanges[i] > 0) {
+//         percentCell.style.color = 'green';
+//       } else if (percentChanges[i] < 0) {
+//         percentCell.style.color = 'red';
+//       }
+      
+//       // Append cells to row
+//       row.appendChild(dateCell);
+//       row.appendChild(priceCell);
+//       row.appendChild(percentCell);
+      
+//       // Append row to table body
+//       tableBody.appendChild(row);
+//     }
+//   }
 // function updateEconomicIndicators(data) {
 //   // Get the container element
 //   const marketIndicatorsContainer = document.querySelector('.market-indicators');
