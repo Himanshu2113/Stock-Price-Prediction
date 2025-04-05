@@ -30,7 +30,7 @@ async function runPrediction() {
     // resultContainer.innerHTML = `<p>🔄 Predicting for ${stockSymbol}...</p>`;
 
     try {
-        const response = await fetch("https://stock-price-prediction-z90n.onrender.com/predict", {
+        const response = await fetch("http://206.189.135.225/predict", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
