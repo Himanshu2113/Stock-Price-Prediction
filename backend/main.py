@@ -330,12 +330,21 @@ def build_arima_model(stock_symbol):
     final_model_fit = final_model.fit()
     next5_days=final_model_fit.forecast(steps=5)
     last_actual = full_history[-1]
+    
+    next5_days = [float(val) for val in next5_days]
 
-    
+    percent=[]
+    direction=[]
     for i, val in enumerate(next5_days, start=1):
-        percent = ((float(val) - float(last_actual)) / float(last_actual)) * 100
+        p = ((float(val) - float(last_actual)) / float(last_actual)) * 100
+        d = "Increase" if p > 0 else "Decrease" if p < 0 else "➖ No Change"
+        percent.append(p)
+        direction.append(d)
+        
+    percent = [float(p) for p in percent]
+    direction = [str(d) for d in direction]
     
-    return final_model_fit, order,next5_days
+    return final_model_fit, order, next5_days, percent,direction
 
 def predict_next_day(model, order):
     """Predict next day's stock price using ARIMA."""
@@ -458,7 +467,7 @@ def predict_stock(request: StockRequest):
     test_series = full_series[train_size:]
     
     # Build ARIMA model - returns the fitted model and its order
-    model, order,next5_days = build_arima_model(request.stock_symbol)
+    model, order,next5_days, percent, direction= build_arima_model(request.stock_symbol)
     
     
         # direction = "📈 Increase" if percent > 0 else "📉 Decrease" if percent < 0 else "➖ No Change"
@@ -489,6 +498,22 @@ def predict_stock(request: StockRequest):
     print(indicators)
     print("5 days forecast",next5_days)
     print("Success")
+    
+    print("Types of return values:")
+    print("predicted_price:", type(next_day_price))
+    print("sentiment:", type(sentiment))
+    print("deep_insight:", type(deep_insight))
+    print("accuracy:", type(mape))
+    print("r2_score:", type(r2))
+    print("news:", type(news_articles))
+    print("y_test_actual:", type(y_test_actual))
+    print("y_pred_actual:", type(y_pred_actual))
+    print("indicators:", type(indicators))
+    print("next5_days:", type(next5_days))
+    print("percent:", type(percent))
+    
+
+    
     return {
         "predicted_price": float(np.round(next_day_price, 2)),
         "sentiment": sentiment,
@@ -499,5 +524,7 @@ def predict_stock(request: StockRequest):
         "y_test_actual": y_test_actual.tolist(),
         "y_pred_actual": y_pred_actual.tolist(),
         "indicators": indicators,
-        "next5_days": next5_days
+        "percent": percent,
+        "next5_days" : next5_days,
+        "direction" : direction
     }

@@ -161,8 +161,23 @@
             <h3 style="font-size: 25px;">Past 30 days trend</h3>
           <div class="prediction-chart">
             <!-- <div class="placeholder-text">Price History & Prediction Chart</div> -->
-             
             <canvas id="predictionChart"></canvas>
+            
+          </div>
+          <div class="prediction-table-container" style="margin-top: 30px;">
+            <h3 style="font-size: 25px;">Next 5 Days Forecast</h3>
+            <table class="prediction-table" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+              <thead>
+                <tr style="background-color: #f2f2f2;">
+                  <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Day</th>
+                  <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Predicted Price</th>
+                  <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Percent Change</th>
+                </tr>
+              </thead>
+              <tbody id="predictionTableBody">
+                <!-- Table rows will be populated via JavaScript -->
+              </tbody>
+            </table>
           </div>
           </div>
           <!-- <div id="stock-insight-container">
