@@ -30,7 +30,7 @@ async function runPrediction() {
     // resultContainer.innerHTML = `<p>🔄 Predicting for ${stockSymbol}...</p>`;
 
     try {
-        const response = await fetch("http://206.189.135.225/predict", {
+        const response = await fetch("http://206.189.135.225:8000/predict", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
