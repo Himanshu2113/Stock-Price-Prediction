@@ -11,15 +11,15 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import requests
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import (
-    LSTM, Bidirectional, Dense, Dropout, Conv1D, MaxPooling1D,
-    Flatten, Input, LayerNormalization,BatchNormalization, MultiHeadAttention, SpatialDropout1D
-)
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from tensorflow.keras.optimizers import Adam,RMSprop
-from tensorflow.keras.losses import Huber
-from tensorflow.keras.models import Model
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import (
+#     LSTM, Bidirectional, Dense, Dropout, Conv1D, MaxPooling1D,
+#     Flatten, Input, LayerNormalization,BatchNormalization, MultiHeadAttention, SpatialDropout1D
+# )
+# from tensorflow.keras.optimizers.schedules import ExponentialDecay
+# from tensorflow.keras.optimizers import Adam,RMSprop
+# from tensorflow.keras.losses import Huber
+# from tensorflow.keras.models import Model
 from sklearn.metrics import r2_score, mean_absolute_percentage_error
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
