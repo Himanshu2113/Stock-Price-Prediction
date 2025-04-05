@@ -1,0 +1,235 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Market Insight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .insight-content {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="window.history.back()">← Back</button>
+            <h1>Market Insight</h1>
+        </div>
+        
+        <div>
+            <h2 id="stockSymbolTitle"></h2>
+            <div id="fullInsight" class="insight-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the stored insight data
+            const insightData = localStorage.getItem("stockInsightData");
+            const stockSymbol = localStorage.getItem("stockInsightSymbol");
+            
+            // Display the stock symbol
+            const symbolElement = document.getElementById("stockSymbolTitle");
+            if (symbolElement && stockSymbol) {
+                symbolElement.textContent = stockSymbol;
+            }
+            
+            // Display the full insight
+            const insightElement = document.getElementById("fullInsight");
+            if (insightElement && insightData) {
+                insightElement.innerHTML = insightData;
+            } else {
+                insightElement.innerHTML = "<p>No insight data available.</p>";
+            }
+        });
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Market Insight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .insight-content {
+            line-height: 1.6;
+        }
+        /* Markdown styling */
+        .insight-content h2 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 25px;
+        }
+        .insight-content h3 {
+            color: #444;
+            margin-top: 20px;
+        }
+        .insight-content strong {
+            font-weight: bold;
+        }
+        .insight-content em {
+            font-style: italic;
+        }
+        .insight-content p {
+            margin: 15px 0;
+        }
+        /* Special styling for key sections */
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #2a5885;
+        }
+        .negative-impact {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        .positive-factor {
+            color: #388e3c;
+            font-weight: bold;
+        }
+        .stock-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .stock-symbol {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .stock-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="window.history.back()">← Back</button>
+            <h1>Market Insight</h1>
+        </div>
+        
+        <div>
+            <div class="stock-header">
+                <h2 id="stockSymbolTitle" class="stock-symbol"></h2>
+                <div id="stockPrice" class="stock-price"></div>
+            </div>
+            <div id="fullInsight" class="insight-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the stored insight data
+            const insightData = localStorage.getItem("stockInsightData");
+            const stockSymbol = localStorage.getItem("stockInsightSymbol");
+            const stockPrice = localStorage.getItem("stockPrice") || "";
+            
+            // Display the stock symbol
+            const symbolElement = document.getElementById("stockSymbolTitle");
+            if (symbolElement && stockSymbol) {
+                symbolElement.textContent = stockSymbol;
+            }
+            
+            // Display stock price if available
+            const priceElement = document.getElementById("stockPrice");
+            if (priceElement && stockPrice) {
+                priceElement.textContent = stockPrice;
+            } else {
+                priceElement.style.display = "none";
+            }
+            
+            // Process and display the full insight
+            const insightElement = document.getElementById("fullInsight");
+            if (insightElement && insightData) {
+                // Convert markdown to HTML
+                let processedContent = insightData;
+                
+                // Process headings (## and ###)
+                processedContent = processedContent.replace(/## (.*?)(\n|$)/g, '<h2>$1</h2>');
+                processedContent = processedContent.replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>');
+                
+                // Process bold and italic
+                processedContent = processedContent.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+                processedContent = processedContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                processedContent = processedContent.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // Process line breaks
+                processedContent = processedContent.replace(/\n\n/g, '</p><p>');
+                processedContent = '<p>' + processedContent + '</p>';
+                
+                // Add special styling for "Negative Impacts" and "Potential Mitigating Factors"
+                processedContent = processedContent.replace(/<strong>Negative Impacts:<\/strong>/g, 
+                    '<div class="section-title negative-impact">Negative Impacts:</div>');
+                processedContent = processedContent.replace(/<strong>Potential Mitigating Factors:<\/strong>/g, 
+                    '<div class="section-title positive-factor">Potential Mitigating Factors:</div>');
+                
+                insightElement.innerHTML = processedContent;
+            } else {
+                insightElement.innerHTML = "<p>No insight data available.</p>";
+            }
+        });
+    </script>
+</body>
+</html>
