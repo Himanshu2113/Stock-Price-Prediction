@@ -217,6 +217,29 @@ a{
     text-decoration: none;
 }
 
+
+.prediction-heading {
+  /* text-align: center; */
+  margin-bottom: 20px;
+}
+
+.prediction-heading h4 {
+  
+  font-size: 24px;
+  font-weight: 600;
+  /* color: #2c3e50; */
+  color: #007bff;
+  margin-bottom: 8px;
+}
+
+.prediction-heading p {
+  font-size: 16px;
+  /* color: #7f8c8d; */
+  color: #00c853;
+  font-style: italic;
+}
+
+
 #agent_analysis {
     background-color: #47e070;
     border: none;
@@ -637,7 +660,7 @@ a{
     
     /* Market Overview Card */
     .market-overview-card {
-      grid-column: span 6;
+      grid-column: span 12 ;
     }
     
     .market-indicators {
